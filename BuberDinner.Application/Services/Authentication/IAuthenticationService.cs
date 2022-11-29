@@ -1,7 +1,9 @@
+using ErrorOr;
+
 namespace BuberDinner.Application.Services.Authentication;
 
 public interface IAuthenticationService
 {
-    AuthenticationResult Login(LoginReq request);
-    AuthenticationResult Register(RegisterReq request);
+    ErrorOr<AuthenticationResult> Login(LoginReq request);
+    ErrorOr<AuthenticationResult> Register(RegisterReq request);
 }
