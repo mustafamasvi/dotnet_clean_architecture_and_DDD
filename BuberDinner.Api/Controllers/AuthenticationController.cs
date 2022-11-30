@@ -4,10 +4,12 @@ using MediatR;
 using BuberDinner.Application.Authentication.Commands;
 using BuberDinner.Application.Authentication.Queries;
 using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BuberDinner.Api.Controllers;
 
 [Route("auth")]
+[AllowAnonymous]
 public class AuthenticationController : ApiController
 {
     private readonly IMediator _mediator;
@@ -21,7 +23,7 @@ public class AuthenticationController : ApiController
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
-        var command =   _mapper.Map<RegisterCommand>(request);
+        var command = _mapper.Map<RegisterCommand>(request);
         var authResult = await _mediator.Send(command);
 
         return authResult.Match(
@@ -32,10 +34,10 @@ public class AuthenticationController : ApiController
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
-    {   
+    {
         var query = _mapper.Map<LoginQuery>(request);
 
-        var authResult  = await _mediator.Send(query);
+        var authResult = await _mediator.Send(query);
 
         return authResult.Match(
             authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
